@@ -1,0 +1,13 @@
+{
+    "name": "NoCAPTCHAJS",
+    "version": "1.0.0",
+    "main": "nocaptchajs.js",
+    "ignore": [
+        ".jshintrc",
+        "**/*.txt"
+    ],
+    "dependencies": {
+    },
+    "devDependencies": {
+    }
+}
