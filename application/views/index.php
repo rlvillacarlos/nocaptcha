@@ -95,7 +95,7 @@
                             <div class="col-lg-8 col-lg-offset-2 text-center">
                                 <h2 class="section-heading">
                                     <i class="fa fa-fw fa-users"></i> 
-                                    I am human, I don't CAPTCHA.
+                                    I am human, I won't CAPTCHA.
                                 </h2>                    
                             </div>
                         </div>                                                

@@ -111,7 +111,7 @@ else
  * - boolean  expose      set the X-Powered-By header                        FALSE
  */
 Kohana::init(array(
-	'base_url'   => '/nocaptcha/',
+	'base_url'   => RUN_LOCAL? '/nocaptcha/':'',
         'index_file' =>false,    
         'profile'    => Kohana::$environment !== Kohana::PRODUCTION,
         'caching'    => Kohana::$environment === Kohana::PRODUCTION,   
