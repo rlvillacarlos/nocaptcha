@@ -27,7 +27,40 @@ class Controller_Index extends Controller {
     }
 
     public function action_index() {
-        
+        $session = Session::instance('database');
+        $indexView = View::factory("index");
+        Log::instance()->add(Log::DEBUG, print_r($session->get('credentials'),true));
+        $credentials = json_decode($session->get('credentials'), true);
+        $user = "";
+        $state=null;
+        if (isset($credentials)) {
+            $isLogged = true;
+            $this->client->setAccessToken($credentials['access_token']);
+            
+            if ($this->client->isAccessTokenExpired()) {
+                $this->client->getRefreshToken($credentials['refresh_token']);
+            }
+
+            $oauth = new Google_Service_Oauth2($this->client);
+            $userInfo = $oauth->userinfo->get();
+            $user = $userInfo->name;
+            $acct = new Model_Account($userInfo->id);
+            $state=$this->generateAccountState($acct);
+            
+//            Log::instance()->add(Log::ALERT, print_r($userInfo,true));
+        }else{
+            Log::instance()->add(Log::ALERT, "NO CREDENTIALS");
+        }
+        $indexView->set("isLogged",  isset($isLogged));
+        $indexView->set("user",  $user);
+        $indexView->set("state",  $state);
+        $this->response->body($indexView->render());
+    }
+    
+    public function action_disconnect(){
+        $session = Session::instance('database');        
+        $session->destroy();
+        $this->redirect('index');
     }
     
     public function action_verify() {
@@ -46,6 +79,7 @@ class Controller_Index extends Controller {
                     $userInfo = $oauth->userinfo->get();
 
                     $acct = new Model_Account($userInfo->id);
+                    $this->updateAccountState($acct);
                     $state=$this->generateAccountState($acct);
                     
                     if ($acct->loaded()) {                        
@@ -113,11 +147,9 @@ class Controller_Index extends Controller {
             $this->redirect('index');
         }
     }
-    private function generateAccountState($acct){        
-        $state =["success"=>FALSE, "quota"=>-1,"access_count"=>-1,"remaining"=>-1];
-        
+    private function updateAccountState($acct){
         if ($acct && $acct->loaded()) {
-            $state["success"]=true;
+//            $state["success"]=true;
             $start_date = (new DateTime(date('Y-m-d H:i:s', time())))->setTime(0, 0, 0);
             $end_date = (new DateTime(date('Y-m-d H:i:s', time())))->setTime(23, 59, 59);
 
@@ -133,14 +165,34 @@ class Controller_Index extends Controller {
                         ->set('referer', $this->request->referrer())
                         ->save();
                 
-                $state['access_count'] = $access_count + 1;
-                $state['quota'] = $acct->quota->value;
-                $state['remaining'] = $acct->quota->value - $access_count - 1;
-            } else {
-                $state['access_count'] = $access_count;
-                $state['quota'] = $acct->quota->value;
-                $state['remaining'] = 0;                
+                return true;
             }
+        }
+        return false;                
+    }
+    private function generateAccountState($acct){        
+        $state =["success"=>FALSE, "quota"=>-1,"access_count"=>-1,"remaining"=>-1];
+        
+        if ($acct && $acct->loaded()) {
+            $state["success"]=true;
+            $start_date = (new DateTime(date('Y-m-d H:i:s', time())))->setTime(0, 0, 0);
+            $end_date = (new DateTime(date('Y-m-d H:i:s', time())))->setTime(23, 59, 59);
+
+            $access_count = $acct->access
+                    ->where('entry_date', '>=', $start_date->format('Y-m-d H:i:s'))
+                    ->where('entry_date', '<=', $end_date->format('Y-m-d H:i:s'))
+                    ->where('referer', 'LIKE', $this->origin . '%')
+                    ->count_all();
+
+//            if ($access_count < $acct->quota->value) {                
+            $state['access_count'] = $access_count;
+            $state['quota'] = $acct->quota->value;
+            $state['remaining'] = $acct->quota->value - $access_count;
+//            } else {
+//                $state['access_count'] = $access_count;
+//                $state['quota'] = $acct->quota->value;
+//                $state['remaining'] = 0;                
+//            }
         }
         
         return $state;

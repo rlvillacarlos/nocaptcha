@@ -3,17 +3,17 @@
 return array(
     'native' => array(
         'name' => 'nocaptcha',
-        'lifetime' => 3600,
+        'lifetime' => 0,
     ),
     'cookie' => array(
         'name' => 'nocaptcha',
         'encrypted' => TRUE,
-        'lifetime' => 3600,
+        'lifetime' => 0,
     ),
     'database' => array(
         'name' => 'nocaptcha',
         'encrypted' => TRUE,
-        'lifetime' => 3600,
+        'lifetime' => 0,
         'group' => Kohana::$environment === Kohana::PRODUCTION? 
                     'MySQLi_Production':Kohana::$environment === Kohana::STAGING?
                         'MySQLi_Staging':'MySQLi_Development',
