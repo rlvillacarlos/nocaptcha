@@ -57,13 +57,49 @@
 
         <section class="bg-primary" id="about">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 text-center">
-                        <h2 class="section-heading">
-                            <i class="fa fa-fw fa-envelope"></i> 
-                            I Gmail therefore I am.
-                        </h2>                    
-                    </div>
+                <div class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">  
+                        <div class="row item active">
+                            <div class="col-lg-8 col-lg-offset-2 text-center">
+                                <h2 class="section-heading">
+                                    <i class="fa fa-fw fa-envelope"></i> 
+                                    I Gmail therefore I am.
+                                </h2>                    
+                            </div>
+                        </div>                        
+                        <div class="row item">
+                            <div class="col-lg-8 col-lg-offset-2 text-center">
+                                <h2 class="section-heading">
+                                    <i class="fa fa-fw fa-youtube-play"></i> 
+                                    I Youtube therefore I am.
+                                </h2>                    
+                            </div>
+                        </div>                        
+                        <div class="row item">
+                            <div class="col-lg-8 col-lg-offset-2 text-center">
+                                <h2 class="section-heading">
+                                    <i class="fa fa-fw fa-google-plus-square"></i> 
+                                    I Google+ therefore I am.
+                                </h2>                    
+                            </div>
+                        </div>                                                
+                        <div class="row item">
+                            <div class="col-lg-8 col-lg-offset-2 text-center">
+                                <h2 class="section-heading">
+                                    <i class="fa fa-fw fa-play-circle-o"></i> 
+                                    I Google Play therefore I am.
+                                </h2>                    
+                            </div>
+                        </div>                                                
+                        <div class="row item">
+                            <div class="col-lg-8 col-lg-offset-2 text-center">
+                                <h2 class="section-heading">
+                                    <i class="fa fa-fw fa-users"></i> 
+                                    I am human, I don't CAPTCHA.
+                                </h2>                    
+                            </div>
+                        </div>                                                
+                    </div>                    
                 </div>
             </div>
         </section>
@@ -84,7 +120,7 @@
                 <div class="row">
                     <div class="col-xs-12 text-center">
                         <a href="register" class="page-scroll btn btn-default btn-xl sr-button">
-                            <i class="fa fa-pencil"></i> Connect account
+                            <i class="fa fa-fw fa-link"></i> Connect account
                         </a>                        
                     </div>
                 </div>
@@ -107,7 +143,7 @@
                 <div class="row">
                     <div class="col-xs-12 text-center">
                         <a href="disconnect" class="page-scroll btn btn-yellow btn-xl sr-button">
-                            <i class="fa fa-unlink"></i> Disconnect account
+                            <i class="fa fa-fw fa-unlink"></i> Disconnect account
                         </a>                        
                     </div>
                 </div>
@@ -150,7 +186,11 @@
 
         <!-- Theme JavaScript -->
         <script src="public/js/creative.min.js"></script>
-
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.carousel').carousel({inteval:1000});
+            });
+        </script>
     </body>
 
 </html>

@@ -29,7 +29,7 @@ class Controller_Index extends Controller {
     public function action_index() {
         $session = Session::instance('database');
         $indexView = View::factory("index");
-        Log::instance()->add(Log::DEBUG, print_r($session->get('credentials'),true));
+//        Log::instance()->add(Log::DEBUG, print_r($session->get('credentials'),true));
         $credentials = json_decode($session->get('credentials'), true);
         $user = "";
         $state=null;
@@ -79,9 +79,9 @@ class Controller_Index extends Controller {
                     $userInfo = $oauth->userinfo->get();
 
                     $acct = new Model_Account($userInfo->id);
-                    $this->updateAccountState($acct);
+                    $updated=$this->updateAccountState($acct);
                     $state=$this->generateAccountState($acct);
-                    
+                    $state['success']=$updated;
                     if ($acct->loaded()) {                        
                         $this->response
                                 ->headers("Content-Type", "text.json")
